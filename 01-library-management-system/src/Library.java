@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -5,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Library {
+    private static final int LOAN_PERIOD_DAYS = 14;
+    private static final double FINE_PER_DAY = 5.0;
+
     // HashMap keyed by id -> O(1) lookup by book/member id instead of scanning a list
     private Map<Integer, Book> books = new HashMap<>();
     private Map<Integer, Member> members = new HashMap<>();
@@ -34,11 +39,17 @@ public class Library {
             throw new BookNotAvailableException("'" + book.getTitle() + "' is already issued");
         }
 
-        book.setIssued(true);
+        book.markIssued(LocalDate.now().plusDays(LOAN_PERIOD_DAYS));
         member.getIssuedBooks().add(book);
     }
 
-    public void returnBook(int bookId, int memberId) throws BookNotAvailableException {
+    public double returnBook(int bookId, int memberId) throws BookNotAvailableException {
+        return returnBook(bookId, memberId, LocalDate.now());
+    }
+
+    // returnDate is a parameter (not always "today") so overdue behavior can be tested
+    // deterministically instead of waiting for real calendar days to pass.
+    public double returnBook(int bookId, int memberId, LocalDate returnDate) throws BookNotAvailableException {
         Member member = members.get(memberId);
         if (member == null) {
             throw new BookNotAvailableException("No member found with ID " + memberId);
@@ -56,8 +67,15 @@ public class Library {
             throw new BookNotAvailableException("Member " + member.getName() + " has not issued book ID " + bookId);
         }
 
-        toReturn.setIssued(false);
+        double fine = 0.0;
+        if (returnDate.isAfter(toReturn.getDueDate())) {
+            long daysLate = ChronoUnit.DAYS.between(toReturn.getDueDate(), returnDate);
+            fine = daysLate * FINE_PER_DAY;
+        }
+
+        toReturn.markReturned();
         member.getIssuedBooks().remove(toReturn);
+        return fine;
     }
 
     public List<Book> searchByTitle(String keyword) {

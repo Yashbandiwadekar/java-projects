@@ -1,9 +1,12 @@
+import java.time.LocalDate;
+
 // Base class: demonstrates encapsulation (private fields + public getters/setters)
 public class Book {
     private int bookId;
     private String title;
     private String author;
     private boolean issued;
+    private LocalDate dueDate;
 
     public Book(int bookId, String title, String author) {
         this.bookId = bookId;
@@ -28,8 +31,18 @@ public class Book {
         return issued;
     }
 
-    public void setIssued(boolean issued) {
-        this.issued = issued;
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void markIssued(LocalDate dueDate) {
+        this.issued = true;
+        this.dueDate = dueDate;
+    }
+
+    public void markReturned() {
+        this.issued = false;
+        this.dueDate = null;
     }
 
     // Subclasses override this to change issue behavior (polymorphism)
@@ -39,7 +52,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return bookId + " | " + title + " | " + author + " | " + getType()
-                + " | " + (issued ? "Issued" : "Available");
+        String status = issued ? "Issued (due " + dueDate + ")" : "Available";
+        return bookId + " | " + title + " | " + author + " | " + getType() + " | " + status;
     }
 }

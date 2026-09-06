@@ -43,8 +43,12 @@ public class LibraryManagementSystem {
                     System.out.print("Enter member ID: ");
                     int memberId = readInt(scanner);
                     try {
-                        library.returnBook(bookId, memberId);
-                        System.out.println("Book returned successfully.");
+                        double fine = library.returnBook(bookId, memberId);
+                        if (fine > 0) {
+                            System.out.printf("Book returned late. Fine due: %.2f%n", fine);
+                        } else {
+                            System.out.println("Book returned on time, no fine.");
+                        }
                     } catch (BookNotAvailableException e) {
                         System.out.println("Could not return book: " + e.getMessage());
                     }

@@ -61,7 +61,16 @@ public class StudentResultManagementSystem {
                         rank++;
                     }
                 }
-                case 5 -> running = false;
+                case 5 -> {
+                    System.out.printf("Class average: %.2f%%%n", manager.getClassAverage());
+                    for (String subject : manager.getAllSubjects()) {
+                        double avg = manager.getSubjectAverage(subject);
+                        Student topper = manager.getTopperForSubject(subject);
+                        System.out.printf("  %-10s avg: %-6.2f topper: %s (%d)%n",
+                                subject, avg, topper.getName(), topper.getMarksBySubject().get(subject));
+                    }
+                }
+                case 6 -> running = false;
                 default -> System.out.println("Invalid choice, try again.");
             }
         }
@@ -92,7 +101,8 @@ public class StudentResultManagementSystem {
         System.out.println("2. Add marks for a student");
         System.out.println("3. View one student's result");
         System.out.println("4. View ranking (highest percentage first)");
-        System.out.println("5. Exit");
+        System.out.println("5. View class statistics (average + subject toppers)");
+        System.out.println("6. Exit");
         System.out.print("Enter choice: ");
     }
 

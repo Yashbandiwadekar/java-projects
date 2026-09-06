@@ -73,7 +73,11 @@ public class BankAccountSimulator {
                         }
                     }
                 }
-                case 6 -> running = false;
+                case 6 -> {
+                    bank.applyMonthlyInterestToSavings();
+                    System.out.println("Monthly interest applied to all savings accounts.");
+                }
+                case 7 -> running = false;
                 default -> System.out.println("Invalid choice, try again.");
             }
         }
@@ -94,7 +98,8 @@ public class BankAccountSimulator {
         System.out.println("3. Withdraw");
         System.out.println("4. Transfer");
         System.out.println("5. View transaction history");
-        System.out.println("6. Exit");
+        System.out.println("6. Apply monthly interest (all savings accounts)");
+        System.out.println("7. Exit");
         System.out.print("Enter choice: ");
     }
 

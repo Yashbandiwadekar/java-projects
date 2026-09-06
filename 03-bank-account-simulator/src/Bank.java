@@ -34,6 +34,15 @@ public class Bank {
         to.deposit(amount, "Transfer from " + from.getAccountNumber());
     }
 
+    // Credits monthly interest to every savings account; other account types are untouched
+    public void applyMonthlyInterestToSavings() {
+        for (Account account : accounts.values()) {
+            if (account instanceof SavingsAccount savings) {
+                savings.applyMonthlyInterest();
+            }
+        }
+    }
+
     private Account requireAccount(String accountNumber) throws InsufficientFundsException {
         Account account = accounts.get(accountNumber);
         if (account == null) {
