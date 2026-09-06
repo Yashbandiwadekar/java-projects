@@ -8,7 +8,7 @@ public class CurrentAccount extends Account {
 
     // Current accounts may go negative up to the overdraft limit
     @Override
-    public void withdraw(double amount) throws InsufficientFundsException {
+    protected void applyWithdrawalRule(double amount) throws InsufficientFundsException {
         if (balance - amount < -overdraftLimit) {
             throw new InsufficientFundsException(
                     "Withdrawal denied: exceeds overdraft limit of " + overdraftLimit);

@@ -57,7 +57,23 @@ public class BankAccountSimulator {
                         System.out.println("Transfer failed: " + e.getMessage());
                     }
                 }
-                case 5 -> running = false;
+                case 5 -> {
+                    System.out.print("Enter account number: ");
+                    String accNo = scanner.next();
+                    Account account = bank.getAccount(accNo);
+                    if (account == null) {
+                        System.out.println("No account found with number " + accNo);
+                        break;
+                    }
+                    if (account.getHistory().isEmpty()) {
+                        System.out.println("No transactions yet.");
+                    } else {
+                        for (Transaction t : account.getHistory()) {
+                            System.out.println(t);
+                        }
+                    }
+                }
+                case 6 -> running = false;
                 default -> System.out.println("Invalid choice, try again.");
             }
         }
@@ -77,7 +93,8 @@ public class BankAccountSimulator {
         System.out.println("2. Deposit");
         System.out.println("3. Withdraw");
         System.out.println("4. Transfer");
-        System.out.println("5. Exit");
+        System.out.println("5. View transaction history");
+        System.out.println("6. Exit");
         System.out.print("Enter choice: ");
     }
 

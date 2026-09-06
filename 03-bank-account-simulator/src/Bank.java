@@ -30,8 +30,8 @@ public class Bank {
         Account from = requireAccount(fromAccountNumber);
         Account to = requireAccount(toAccountNumber);
 
-        from.withdraw(amount);
-        to.deposit(amount);
+        from.withdraw(amount, "Transfer to " + to.getAccountNumber());
+        to.deposit(amount, "Transfer from " + from.getAccountNumber());
     }
 
     private Account requireAccount(String accountNumber) throws InsufficientFundsException {

@@ -7,7 +7,7 @@ public class SavingsAccount extends Account {
 
     // Savings accounts must keep a minimum balance after withdrawal
     @Override
-    public void withdraw(double amount) throws InsufficientFundsException {
+    protected void applyWithdrawalRule(double amount) throws InsufficientFundsException {
         if (balance - amount < MIN_BALANCE) {
             throw new InsufficientFundsException(
                     "Withdrawal denied: savings account must keep a minimum balance of " + MIN_BALANCE);
